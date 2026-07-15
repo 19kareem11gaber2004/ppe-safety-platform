@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+pydantic
+sqlalchemy
+alembic
+python-dotenv
+
+black
+ruff
+pytest
+httpx
