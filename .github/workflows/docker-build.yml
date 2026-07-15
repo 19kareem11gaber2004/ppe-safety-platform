@@ -1,0 +1,24 @@
+name: Docker Build Verification
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  docker-build:
+    name: Build Docker Images
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Backend Image
+        run: docker build -t ppe-backend ./backend
+
+      - name: Build Frontend Image
+        run: docker build -t ppe-frontend ./frontend
