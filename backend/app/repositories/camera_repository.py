@@ -20,3 +20,13 @@ class CameraRepository(BaseRepository[Camera]):
             .filter(Camera.status == "active")
             .all()
         )
+    def get_by_id(self, camera_id: int) -> Camera | None:
+     return (
+        self.db.query(Camera)
+        .filter(Camera.id == camera_id)
+        .first()
+    )
+
+
+def list(self) -> list[Camera]:
+    return self.db.query(Camera).all()

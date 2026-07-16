@@ -25,3 +25,26 @@ class ViolationRepository(BaseRepository[Violation]):
             )
             .all()
         )
+def get_by_id(
+    self,
+    violation_id: int,
+) -> Violation | None:
+
+    return (
+        self.db.query(Violation)
+        .filter(
+            Violation.id == violation_id
+        )
+        .first()
+    )
+
+
+def list(self):
+
+    return (
+        self.db.query(Violation)
+        .order_by(
+            Violation.created_at.desc()
+        )
+        .all()
+    )
