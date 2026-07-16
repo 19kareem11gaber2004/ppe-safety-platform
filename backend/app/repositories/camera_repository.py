@@ -6,27 +6,59 @@ from app.repositories.base_repository import BaseRepository
 
 class CameraRepository(BaseRepository[Camera]):
 
-    def __init__(self, db: Session):
+    def __init__(
+        self,
+        db: Session,
+    ):
         super().__init__(
             Camera,
-            db
+            db,
         )
 
 
-    def get_active_cameras(self):
+    def get_active_cameras(
+        self,
+    ) -> list[Camera]:
 
         return (
             self.db.query(Camera)
-            .filter(Camera.status == "active")
+            .filter(
+                Camera.status == "active"
+            )
             .all()
         )
-    def get_by_id(self, camera_id: int) -> Camera | None:
-     return (
-        self.db.query(Camera)
-        .filter(Camera.id == camera_id)
-        .first()
-    )
 
 
-def list(self) -> list[Camera]:
-    return self.db.query(Camera).all()
+    def get_by_id(
+        self,
+        camera_id: int,
+    ) -> Camera | None:
+
+        return (
+            self.db.query(Camera)
+            .filter(
+                Camera.id == camera_id
+            )
+            .first()
+        )
+
+
+    def list(
+        self,
+    ) -> list[Camera]:
+
+        return (
+            self.db.query(Camera)
+            .all()
+        )
+
+
+    def update(
+        self,
+        camera: Camera,
+    ) -> Camera:
+
+        self.db.commit()
+        self.db.refresh(camera)
+
+        return camera

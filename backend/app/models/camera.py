@@ -7,52 +7,69 @@ from app.db.base import Base
 
 
 class Camera(Base):
+
     __tablename__ = "cameras"
 
 
     id: Mapped[int] = mapped_column(
         Integer,
         primary_key=True,
-        index=True
+        index=True,
     )
+
 
     name: Mapped[str] = mapped_column(
         String(100),
-        nullable=False
+        nullable=False,
     )
 
+
     location: Mapped[str | None] = mapped_column(
-        String(255)
+        String(255),
+        nullable=True,
     )
+
 
     source_type: Mapped[str] = mapped_column(
         String(50),
-        nullable=False
+        nullable=False,
     )
+
 
     connection_url: Mapped[str] = mapped_column(
         String(500),
-        nullable=False
+        nullable=False,
     )
+
 
     status: Mapped[str] = mapped_column(
         String(50),
-        default="inactive"
+        default="inactive",
     )
+
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime,
-        default=datetime.utcnow
+        default=datetime.utcnow,
     )
+
 
     updated_at: Mapped[datetime] = mapped_column(
         DateTime,
         default=datetime.utcnow,
-        onupdate=datetime.utcnow
+        onupdate=datetime.utcnow,
+    )
+
+
+    configuration = relationship(
+        "CameraConfiguration",
+        back_populates="camera",
+        uselist=False,
+        cascade="all, delete",
     )
 
 
     violations = relationship(
         "Violation",
-        back_populates="camera"
+        back_populates="camera",
     )

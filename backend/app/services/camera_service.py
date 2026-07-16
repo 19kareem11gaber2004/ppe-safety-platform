@@ -1,19 +1,23 @@
 from sqlalchemy.orm import Session
 
-from app.repositories.camera_repository import CameraRepository
 from app.models.camera import Camera
-from app.schemas.camera import CameraCreate, CameraUpdate
+from app.repositories.camera_repository import CameraRepository
+from app.schemas.camera import CameraUpdate
+
 
 class CameraService:
 
-    def __init__(self, db: Session):
+    def __init__(
+        self,
+        db: Session,
+    ):
         self.repository = CameraRepository(db)
 
 
     def create_camera(
         self,
         name: str,
-        location: str,
+        location: str | None,
         source_type: str,
         connection_url: str,
     ) -> Camera:
@@ -26,35 +30,62 @@ class CameraService:
             status="active",
         )
 
-        return self.repository.create(camera)
+        return self.repository.create(
+            camera
+        )
 
 
-    def get_active_cameras(self):
+    def list_cameras(
+        self,
+    ) -> list[Camera]:
+
+        return self.repository.list()
+
+
+    def get_active_cameras(
+        self,
+    ) -> list[Camera]:
 
         return self.repository.get_active_cameras()
-def list_cameras(self):
-    return self.repository.list()
 
 
-def get_camera(self, camera_id: int):
-    return self.repository.get_by_id(camera_id)
+    def get_camera(
+        self,
+        camera_id: int,
+    ) -> Camera | None:
+
+        return self.repository.get_by_id(
+            camera_id
+        )
 
 
-def update_camera(
-    self,
-    camera: Camera,
-    data: CameraUpdate,
-):
-    update_data = data.model_dump(exclude_unset=True)
+    def update_camera(
+        self,
+        camera: Camera,
+        data: CameraUpdate,
+    ) -> Camera:
 
-    for key, value in update_data.items():
-        setattr(camera, key, value)
+        update_data = data.model_dump(
+            exclude_unset=True
+        )
 
-    return self.repository.update(camera)
+        for key, value in update_data.items():
+            setattr(
+                camera,
+                key,
+                value,
+            )
+
+        return self.repository.update(
+            camera
+        )
 
 
-def delete_camera(
-    self,
-    camera: Camera,
-):
-    self.repository.delete(camera)
+    def delete_camera(
+        self,
+        camera: Camera,
+    ):
+
+        self.repository.delete(
+            camera
+        )
